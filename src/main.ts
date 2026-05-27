@@ -13,8 +13,13 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: ['http://localhost:5000', 'https://moodstoryai.vercel.app/'],
-    methods: ['GET', 'POST'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://moodstoryai.vercel.app/',
+    ],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type'],
   });
 
   app.useGlobalPipes(new ValidationPipe());
