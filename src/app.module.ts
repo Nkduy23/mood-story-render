@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { RenderModule } from './render/render.module';
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
   imports: [
+     ConfigModule.forRoot({ isGlobal: true }),
     BullModule.forRoot({
       redis: {
         host: 'localhost',

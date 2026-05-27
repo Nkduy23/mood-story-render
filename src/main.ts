@@ -2,29 +2,22 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Serve static output files
-  app.useStaticAssets(join(__dirname, '..', 'output'), {
-    prefix: '/output/',
-  });
-
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'https://moodstoryai.vercel.app/',
-    ],
+    origin: '*', // ← đổi thành * cho đơn giản khi dev
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
   });
 
-  app.useGlobalPipes(new ValidationPipe());
+  // Static files phải đặt SAU enableCors
+  app.useStaticAssets(join(process.cwd(), 'output'), {
+    prefix: '/output/',
+  });
 
-  await app.listen(5000);
-  console.log('Render service running on port 5000');
+  await app.listen(process.env.PORT ?? 5000);
+  console.log(`Render service running on port ${process.env.PORT ?? 5000}`);
 }
 bootstrap();
